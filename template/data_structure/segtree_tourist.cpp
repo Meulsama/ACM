@@ -1,7 +1,7 @@
 /**
  *    author:  tourist
- *    created: 03.01.2022 17:51:22       
-**/
+ *    created: 03.01.2022 17:51:22
+ **/
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -40,9 +40,7 @@ class segtree {
     }
   }
 
-  inline void pull(int x, int z) {
-    tree[x] = unite(tree[x + 1], tree[z]);
-  }
+  inline void pull(int x, int z) { tree[x] = unite(tree[x + 1], tree[z]); }
 
   int n;
   vector<node> tree;
@@ -93,7 +91,7 @@ class segtree {
   }
 
   template <typename... M>
-  void modify(int x, int l, int r, int ll, int rr, const M&... v) {
+  void modify(int x, int l, int r, int ll, int rr, const M &...v) {
     if (ll <= l && r <= rr) {
       tree[x].apply(l, r, v...);
       return;
@@ -110,7 +108,8 @@ class segtree {
     pull(x, z);
   }
 
-  int find_first_knowingly(int x, int l, int r, const function<bool(const node&)> &f) {
+  int find_first_knowingly(int x, int l, int r,
+                           const function<bool(const node &)> &f) {
     if (l == r) {
       return l;
     }
@@ -127,7 +126,8 @@ class segtree {
     return res;
   }
 
-  int find_first(int x, int l, int r, int ll, int rr, const function<bool(const node&)> &f) {
+  int find_first(int x, int l, int r, int ll, int rr,
+                 const function<bool(const node &)> &f) {
     if (ll <= l && r <= rr) {
       if (!f(tree[x])) {
         return -1;
@@ -148,7 +148,8 @@ class segtree {
     return res;
   }
 
-  int find_last_knowingly(int x, int l, int r, const function<bool(const node&)> &f) {
+  int find_last_knowingly(int x, int l, int r,
+                          const function<bool(const node &)> &f) {
     if (l == r) {
       return l;
     }
@@ -165,7 +166,8 @@ class segtree {
     return res;
   }
 
-  int find_last(int x, int l, int r, int ll, int rr, const function<bool(const node&)> &f) {
+  int find_last(int x, int l, int r, int ll, int rr,
+                const function<bool(const node &)> &f) {
     if (ll <= l && r <= rr) {
       if (!f(tree[x])) {
         return -1;
@@ -211,7 +213,7 @@ class segtree {
   }
 
   template <typename... M>
-  void modify(int ll, int rr, const M&... v) {
+  void modify(int ll, int rr, const M &...v) {
     assert(0 <= ll && ll <= rr && rr <= n - 1);
     modify(0, 0, n - 1, ll, rr, v...);
   }
@@ -219,12 +221,12 @@ class segtree {
   // find_first and find_last call all FALSE elements
   // to the left (right) of the sought position exactly once
 
-  int find_first(int ll, int rr, const function<bool(const node&)> &f) {
+  int find_first(int ll, int rr, const function<bool(const node &)> &f) {
     assert(0 <= ll && ll <= rr && rr <= n - 1);
     return find_first(0, 0, n - 1, ll, rr, f);
   }
 
-  int find_last(int ll, int rr, const function<bool(const node&)> &f) {
+  int find_last(int ll, int rr, const function<bool(const node &)> &f) {
     assert(0 <= ll && ll <= rr && rr <= n - 1);
     return find_last(0, 0, n - 1, ll, rr, f);
   }
@@ -233,7 +235,7 @@ class segtree {
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  const int N = (int) 1e5 + 10;
+  const int N = (int)1e5 + 10;
   segtree st(N);
   int tt;
   cin >> tt;
@@ -254,16 +256,16 @@ int main() {
       b[i].resize(k[i]);
       sum[i] = 0;
       for (int j = 0; j < k[i]; j++) {
-        cin >> b[i][j];      
+        cin >> b[i][j];
         sum[i] += b[i][j];
       }
-      at[i] = (int) ((sum[i] + k[i] - 1) / k[i]);
+      at[i] = (int)((sum[i] + k[i] - 1) / k[i]);
       st.modify(0, at[i], -1);
     }
     for (int i = 0; i < m; i++) {
       st.modify(0, at[i], +1);
       for (int j = 0; j < k[i]; j++) {
-        int new_at = (int) ((sum[i] - b[i][j] + k[i] - 2) / (k[i] - 1));
+        int new_at = (int)((sum[i] - b[i][j] + k[i] - 2) / (k[i] - 1));
         st.modify(0, new_at, -1);
         cout << (st.get(0, N - 1).mn >= 0 ? '1' : '0');
         st.modify(0, new_at, +1);
